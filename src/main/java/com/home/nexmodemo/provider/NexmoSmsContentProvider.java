@@ -1,12 +1,8 @@
 package com.home.nexmodemo.provider;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 /**
  * Simple pojo to provide content for text messages.
  */
-@Component
 public class NexmoSmsContentProvider {
 
     private final String target;
@@ -19,9 +15,7 @@ public class NexmoSmsContentProvider {
      * @param from from field.
      * @param body body of the message.
      */
-    public NexmoSmsContentProvider( @Value("${message.number}") final String target,
-                                    @Value("${message.from}") final String from,
-                                    @Value("${message.body}") final String body) {
+    public NexmoSmsContentProvider(final String target, final String from, final String body) {
         this.target = target;
         this.from = from;
         this.body = body;

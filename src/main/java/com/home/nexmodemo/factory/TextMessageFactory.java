@@ -2,6 +2,7 @@ package com.home.nexmodemo.factory;
 
 import org.springframework.stereotype.Component;
 
+import com.home.nexmodemo.context.TextMessageContext;
 import com.nexmo.client.sms.messages.TextMessage;
 
 /**
@@ -12,12 +13,10 @@ public class TextMessageFactory {
 
     /**
      * Creates a {@link TextMessage}.
-     * @param from from field.
-     * @param target to field.
-     * @param body body of the message.
+     * @param textMessageContext all info needed for text message.
      * @return created message.
      */
-    public TextMessage getTextMessage(final String from, final String target, final String body) {
-        return new TextMessage(from, target, body);
+    public TextMessage getTextMessage(final TextMessageContext textMessageContext) {
+        return new TextMessage(textMessageContext.getFrom(), textMessageContext.getTo(), textMessageContext.getBody());
     }
 }

@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.home.nexmodemo.context.TextMessageContext;
 import com.home.nexmodemo.factory.TextMessageFactory;
-import com.home.nexmodemo.provider.NexmoSmsContentProvider;
 import com.nexmo.client.NexmoClient;
 import com.nexmo.client.NexmoClientException;
 import com.nexmo.client.sms.SmsSubmissionResult;
@@ -26,14 +26,11 @@ public class NexmoSmsSenderService implements SmsMessageService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NexmoSmsSenderService.class);
 
     private final NexmoClient nexmoClient;
-    private final NexmoSmsContentProvider contentProvider;
     private final TextMessageFactory textMessageFactory;
 
     @Autowired
-    public NexmoSmsSenderService(final NexmoClient nexmoClient, final NexmoSmsContentProvider nexmoSmsContentProvider,
-            final TextMessageFactory textMessageFactory) {
+    public NexmoSmsSenderService(final NexmoClient nexmoClient, final TextMessageFactory textMessageFactory) {
         this.nexmoClient = nexmoClient;
-        this.contentProvider = nexmoSmsContentProvider;
         this.textMessageFactory = textMessageFactory;
     }
 
@@ -41,17 +38,17 @@ public class NexmoSmsSenderService implements SmsMessageService {
      * Sends message and gets the result.
      * @return result of the transaction.
      */
-    public Optional<SmsSubmissionResult[]> getResults() {
-        Message message = getTextMessage();
+    public Optional<SmsSubmissionResult[]> getResults(final TextMessageContext textMessageContext) {
+        Message message = getTextMessage(textMessageContext);
         try {
             return Optional.ofNullable(nexmoClient.getSmsClient().submitMessage(message));
         } catch (IOException | NexmoClientException exception) {
-            LOGGER.error(ERROR_MESSAGE_PATTERN, contentProvider.getFrom(), contentProvider.getTarget(), contentProvider.getBody(), exception);
+            LOGGER.error(ERROR_MESSAGE_PATTERN, textMessageContext.getFrom(), textMessageContext.getTo(), textMessageContext.getBody(), exception);
             return Optional.empty();
         }
     }
 
-    private TextMessage getTextMessage() {
-        return textMessageFactory.getTextMessage(contentProvider.getFrom(), contentProvider.getTarget(), contentProvider.getBody());
+    private TextMessage getTextMessage(final TextMessageContext textMessageContext) {
+        return textMessageFactory.getTextMessage(textMessageContext);
     }
 }

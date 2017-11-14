@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.home.nexmodemo.context.TextMessageContext;
 import com.nexmo.client.sms.SmsSubmissionResult;
 
 /**
@@ -27,8 +28,8 @@ public class MessageService {
      * Translates message sending result to simple String response.
      * @return result as a String.
      */
-    public String getMessageSendingResult() {
-        return nexmoSmsSenderService.getResults().map(this::getSmsSubmissionResult).orElse(ERROR_RESULT);
+    public String getMessageSendingResult(final TextMessageContext textMessageContext) {
+        return nexmoSmsSenderService.getResults(textMessageContext).map(this::getSmsSubmissionResult).orElse(ERROR_RESULT);
     }
 
     private String getSmsSubmissionResult(final SmsSubmissionResult[] result) {

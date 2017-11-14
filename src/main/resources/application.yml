@@ -4,6 +4,5 @@ api:
   key: 033f4509
   secret: 75f4858c86398aec
 message:
-  number: 36204097227
   from: NEXMO
   body: Custom message

@@ -1,14 +1,21 @@
 package com.home.nexmodemo.configuration;
 
-import com.home.nexmodemo.provider.NexmoCredentialsProvider;
-import com.nexmo.client.NexmoClient;
-import com.nexmo.client.auth.TokenAuthMethod;
+import com.home.nexmodemo.provider.NexmoSmsContentProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.home.nexmodemo.provider.NexmoCredentialsProvider;
+import com.nexmo.client.NexmoClient;
+import com.nexmo.client.auth.TokenAuthMethod;
+
 @Configuration
 public class WebApplicationConfiguration {
+
+    @Bean
+    public NexmoSmsContentProvider getNexmoSmsContentProvider(@Value("${message.from}") final String from, @Value("${message.body}") final String body) {
+        return new NexmoSmsContentProvider(null, from, body);
+    }
 
     @Bean
     public NexmoClient getNexmoClient(@Value("${api.key}") final String apiKey, @Value("${api.secret}") final String apiSecret) {

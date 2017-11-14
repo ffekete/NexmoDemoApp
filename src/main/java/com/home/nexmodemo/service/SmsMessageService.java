@@ -1,10 +1,11 @@
 package com.home.nexmodemo.service;
 
-import com.nexmo.client.sms.SmsSubmissionResult;
-
 import java.util.Optional;
+
+import com.home.nexmodemo.context.TextMessageContext;
+import com.nexmo.client.sms.SmsSubmissionResult;
 
 interface SmsMessageService {
 
-    Optional<SmsSubmissionResult[]> getResults();
+    Optional<SmsSubmissionResult[]> getResults(TextMessageContext textMessageContext);
 }

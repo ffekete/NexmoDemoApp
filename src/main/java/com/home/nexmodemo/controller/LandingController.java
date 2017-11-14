@@ -1,25 +1,32 @@
 package com.home.nexmodemo.controller;
 
+import java.io.IOException;
 
-import com.home.nexmodemo.service.MessageService;
-import com.home.nexmodemo.service.NexmoSmsSenderService;
-import com.nexmo.client.NexmoClientException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import com.home.nexmodemo.context.TextMessageContext;
+import com.home.nexmodemo.factory.TextMessageContextFactory;
+import com.home.nexmodemo.provider.NexmoSmsContentProvider;
+import com.home.nexmodemo.service.MessageService;
+import com.nexmo.client.NexmoClientException;
 
 /**
  * Handles requests for landing page.
  */
-@Controller
+@RestController
 public class LandingController {
+
+    private static final String MESSAGE_SENDING_PATH = "/message/to/{number}";
 
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private NexmoSmsContentProvider contentProvider;
 
     /**
      * Request handling method for GET requests.
@@ -27,9 +34,11 @@ public class LandingController {
      * @throws IOException IO errors.
      * @throws NexmoClientException Client errors.
      */
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @RequestMapping(path = MESSAGE_SENDING_PATH, method = RequestMethod.GET)
     @ResponseBody
-    public String getResponse() throws IOException, NexmoClientException {
-        return messageService.getMessageSendingResult();
+    public String getResponse(@PathVariable final String number) throws IOException, NexmoClientException {
+        TextMessageContext textMessageContext = TextMessageContextFactory.createFrom(contentProvider.getFrom(), number,
+                contentProvider.getBody());
+        return messageService.getMessageSendingResult(textMessageContext);
     }
 }
