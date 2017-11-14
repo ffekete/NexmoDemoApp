@@ -1,11 +1,15 @@
 package com.home.nexmodemo.service;
 
-import com.nexmo.client.sms.SmsSubmissionResult;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import com.nexmo.client.sms.SmsSubmissionResult;
 
+/**
+ * Gets message sending result and processes its content.
+ */
 @Service
 public class MessageService {
 
@@ -19,14 +23,17 @@ public class MessageService {
         this.nexmoSmsSenderService = nexmoSmsSenderService;
     }
 
+    /**
+     * Translates message sending result to simple String response.
+     * @return result as a String.
+     */
     public String getMessageSendingResult() {
-        return getMessageResult(nexmoSmsSenderService.getResults());
+        return nexmoSmsSenderService.getResults().map(this::getSmsSubmissionResult).orElse(ERROR_RESULT);
     }
 
-    private String getMessageResult(final SmsSubmissionResult[] results) {
-        return Arrays.asList(results).stream()
+    private String getSmsSubmissionResult(final SmsSubmissionResult[] result) {
+        return Arrays.stream(result)
                 .map(SmsSubmissionResult::getStatus)
-                .anyMatch(result -> result != SmsSubmissionResult.STATUS_OK)
-                 ? ERROR_RESULT : OK_RESULT;
+                .anyMatch(submissionResult -> submissionResult != SmsSubmissionResult.STATUS_OK) ? ERROR_RESULT : OK_RESULT;
     }
 }

@@ -1,18 +1,24 @@
 package com.home.nexmodemo.service;
 
+import java.io.IOException;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.home.nexmodemo.factory.TextMessageFactory;
 import com.home.nexmodemo.provider.NexmoSmsContentProvider;
 import com.nexmo.client.NexmoClient;
 import com.nexmo.client.NexmoClientException;
 import com.nexmo.client.sms.SmsSubmissionResult;
 import com.nexmo.client.sms.messages.Message;
 import com.nexmo.client.sms.messages.TextMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
+/**
+ * Obtains {@link TextMessage} and sends it via {@link NexmoClient}.
+ */
 @Service
 public class NexmoSmsSenderService implements SmsMessageService {
 
@@ -21,21 +27,31 @@ public class NexmoSmsSenderService implements SmsMessageService {
 
     private final NexmoClient nexmoClient;
     private final NexmoSmsContentProvider contentProvider;
+    private final TextMessageFactory textMessageFactory;
 
     @Autowired
-    public NexmoSmsSenderService(final NexmoClient nexmoClient, final NexmoSmsContentProvider nexmoSmsContentProvider) {
+    public NexmoSmsSenderService(final NexmoClient nexmoClient, final NexmoSmsContentProvider nexmoSmsContentProvider,
+            final TextMessageFactory textMessageFactory) {
         this.nexmoClient = nexmoClient;
         this.contentProvider = nexmoSmsContentProvider;
+        this.textMessageFactory = textMessageFactory;
     }
 
-    public SmsSubmissionResult[] getResults() {
-        Message message = new TextMessage(contentProvider.getFrom(), contentProvider.getTarget(), contentProvider.getBody());
+    /**
+     * Sends message and gets the result.
+     * @return result of the transaction.
+     */
+    public Optional<SmsSubmissionResult[]> getResults() {
+        Message message = getTextMessage();
         try {
-            return nexmoClient.getSmsClient().submitMessage(message);
+            return Optional.ofNullable(nexmoClient.getSmsClient().submitMessage(message));
         } catch (IOException | NexmoClientException exception) {
             LOGGER.error(ERROR_MESSAGE_PATTERN, contentProvider.getFrom(), contentProvider.getTarget(), contentProvider.getBody(), exception);
-            return null;
+            return Optional.empty();
         }
+    }
 
+    private TextMessage getTextMessage() {
+        return textMessageFactory.getTextMessage(contentProvider.getFrom(), contentProvider.getTarget(), contentProvider.getBody());
     }
 }

@@ -12,15 +12,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 
+/**
+ * Handles requests for landing page.
+ */
 @Controller
 public class LandingController {
 
     @Autowired
     private MessageService messageService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    /**
+     * Request handling method for GET requests.
+     * @return Result of the message sending.
+     * @throws IOException IO errors.
+     * @throws NexmoClientException Client errors.
+     */
+    @RequestMapping(path = "/", method = RequestMethod.GET)
     @ResponseBody
-    public String getRequestBody() throws IOException, NexmoClientException {
+    public String getResponse() throws IOException, NexmoClientException {
         return messageService.getMessageSendingResult();
     }
 }
