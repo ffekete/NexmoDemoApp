@@ -19,7 +19,6 @@ import org.mockito.Mock;
 
 import com.home.nexmodemo.context.TextMessageContext;
 import com.home.nexmodemo.factory.TextMessageFactory;
-import com.home.nexmodemo.provider.NexmoSmsContentProvider;
 import com.nexmo.client.NexmoClient;
 import com.nexmo.client.NexmoClientException;
 import com.nexmo.client.sms.SmsClient;
@@ -35,8 +34,6 @@ public class NexmoSmsSenderServiceTest {
     @Mock
     private NexmoClient nexmoClient;
     @Mock
-    private NexmoSmsContentProvider nexmoSmsContentProvider;
-    @Mock
     private TextMessageFactory textMessageFactory;
     @InjectMocks
     private NexmoSmsSenderService underTest;
@@ -44,7 +41,7 @@ public class NexmoSmsSenderServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        reset(nexmoClient, nexmoSmsContentProvider);
+        reset(nexmoClient);
     }
 
     @Test
@@ -56,9 +53,6 @@ public class NexmoSmsSenderServiceTest {
         when(nexmoClient.getSmsClient()).thenReturn(smsClient);
         when(textMessageFactory.getTextMessage(textMessageContext)).thenReturn(textMessage);
         when(smsClient.submitMessage(textMessage)).thenThrow(new NexmoClientException());
-        when(nexmoSmsContentProvider.getFrom()).thenReturn(FROM);
-        when(nexmoSmsContentProvider.getBody()).thenReturn(BODY);
-        when(nexmoSmsContentProvider.getTarget()).thenReturn(TARGET);
         // WHEN
         Optional<SmsSubmissionResult[]> results = underTest.getResults(textMessageContext);
         // THEN
@@ -77,9 +71,6 @@ public class NexmoSmsSenderServiceTest {
         when(nexmoClient.getSmsClient()).thenReturn(smsClient);
         when(textMessageFactory.getTextMessage(textMessageContext)).thenReturn(textMessage);
         when(smsClient.submitMessage(textMessage)).thenReturn(smsSubmissionResults);
-        when(nexmoSmsContentProvider.getFrom()).thenReturn(FROM);
-        when(nexmoSmsContentProvider.getBody()).thenReturn(BODY);
-        when(nexmoSmsContentProvider.getTarget()).thenReturn(TARGET);
         // WHEN
         Optional<SmsSubmissionResult[]> results = underTest.getResults(textMessageContext);
         // THEN

@@ -1,8 +1,5 @@
 server:
   port: 8000
 api:
-  key: key
-  secret: secret
-message:
-  from: NEXMO
-  body: Custom message
+  key: empty
+  secret: empty
