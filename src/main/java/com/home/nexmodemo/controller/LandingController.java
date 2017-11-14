@@ -41,4 +41,9 @@ public class LandingController {
                 contentProvider.getBody());
         return messageService.getMessageSendingResult(textMessageContext);
     }
+
+    @RequestMapping(path = MESSAGE_SENDING_PATH)
+    public String getDefaultResponse() {
+        return "This http method is not supported, please send a POST request instead.";
+    }
 }
