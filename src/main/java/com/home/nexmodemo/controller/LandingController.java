@@ -34,7 +34,7 @@ public class LandingController {
      * @throws IOException IO errors.
      * @throws NexmoClientException Client errors.
      */
-    @RequestMapping(path = MESSAGE_SENDING_PATH, method = RequestMethod.GET)
+    @RequestMapping(path = MESSAGE_SENDING_PATH, method = RequestMethod.POST)
     @ResponseBody
     public String getResponse(@PathVariable final String number) throws IOException, NexmoClientException {
         TextMessageContext textMessageContext = TextMessageContextFactory.createFrom(contentProvider.getFrom(), number,

@@ -1,8 +1,8 @@
 server:
   port: 8000
 api:
-  key: 033f4509
-  secret: 75f4858c86398aec
+  key: key
+  secret: secret
 message:
   from: NEXMO
   body: Custom message
