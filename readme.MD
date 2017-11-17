@@ -24,3 +24,12 @@ Before the first compile a valid api key and api secret value needs to be specif
     docker run -p {portNumber}:8000 -t nexmodemo
 
 Specify the port number for the docker image.
+
+### Metrics
+Metrics can be accessed by the admin path:
+
+    /admin
+    
+Implemented metrics:
+* Number of started requests
+* Latency time of requests
