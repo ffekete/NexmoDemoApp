@@ -3,3 +3,5 @@ server:
 api:
   key: null
   secret: null
+metrics:
+  adminUrlMapping: "/admin/*"
