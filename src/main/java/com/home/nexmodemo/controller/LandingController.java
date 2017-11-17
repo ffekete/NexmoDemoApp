@@ -1,5 +1,8 @@
 package com.home.nexmodemo.controller;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.home.nexmodemo.listener.MyMetricsServletContextListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,9 @@ public class LandingController {
     private static final String MESSAGE_SENDING_PATH = "/message";
     private static final String HELP_MESSAGE = "This http method is not supported, please send a POST request instead.";
 
+    private final MetricRegistry metricRegistry = MyMetricsServletContextListener.METRIC_REGISTRY;
+    private final Meter requestsStarted = metricRegistry.meter("requestsStarted");
+
     @Autowired
     private MessageService messageService;
 
@@ -30,6 +36,7 @@ public class LandingController {
     @RequestMapping(path = MESSAGE_SENDING_PATH, method = RequestMethod.POST)
     @ResponseBody
     public String getResponse(@RequestParam final String to, @RequestParam final String from, @RequestParam final String body) {
+        requestsStarted.mark();
         TextMessageContext textMessageContext = TextMessageContextFactory.createFrom(from, to, body);
         return messageService.getMessageSendingResult(textMessageContext);
     }
