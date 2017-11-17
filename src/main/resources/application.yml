@@ -1,5 +1,5 @@
 server:
   port: 8000
 api:
-  key: empty
-  secret: empty
+  key: null
+  secret: null
