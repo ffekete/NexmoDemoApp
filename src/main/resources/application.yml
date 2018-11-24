@@ -1,7 +1,7 @@
 server:
   port: 8000
 api:
-  key: null
-  secret: null
+  key: 033f4509
+  secret: 75f4858c86398aec
 metrics:
   adminUrlMapping: "/admin/*"
