@@ -1,16 +1,19 @@
 package com.home.nexmodemo.controller;
 
+import com.home.nexmodemo.response.SmsResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.home.nexmodemo.context.TextMessageContext;
-import com.home.nexmodemo.factory.TextMessageContextFactory;
+import com.home.nexmodemo.dto.TextMessageDTO;
 import com.home.nexmodemo.listener.MyMetricsServletContextListener;
 import com.home.nexmodemo.service.MessageService;
 
@@ -18,12 +21,16 @@ import com.home.nexmodemo.service.MessageService;
  * Handles requests for message path.
  */
 @RestController
+@Api(description = "Send sms messages by posting a json to this controller.")
 public class MessageController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
     private static final String MESSAGE_SENDING_PATH = "/message";
     private static final String HELP_MESSAGE = "This http method is not supported, please send a POST request instead.";
     private static final String REQUESTS_STARTED = "requestsStarted";
     private static final String LATENCY = "latency";
+    private static final String APPLICATION_JSON = "application/json";
 
     private final MetricRegistry metricRegistry = MyMetricsServletContextListener.METRIC_REGISTRY;
     private final Meter requestsStarted = metricRegistry.meter(REQUESTS_STARTED);
@@ -33,14 +40,15 @@ public class MessageController {
     private MessageService messageService;
 
     /**
-     * Request handling method for GET requests.
+     * Request handling method for POST requests.
      * @return Result of the message sending.
      */
-    @RequestMapping(path = MESSAGE_SENDING_PATH, method = RequestMethod.POST)
-    public String getResponse(@RequestParam final String to, @RequestParam final String from, @RequestParam final String body) {
+    @RequestMapping(path = MESSAGE_SENDING_PATH, method = RequestMethod.POST, consumes = APPLICATION_JSON)
+    @ApiOperation(value = "Sends sms messages", httpMethod = "POST", consumes = "application/json", response = SmsResponse.class)
+    public SmsResponse getResponse(@RequestBody TextMessageDTO json) {
         final Timer.Context context = startMetrics();
-        TextMessageContext textMessageContext = TextMessageContextFactory.createFrom(from, to, body);
-        String result = messageService.getMessageSendingResult(textMessageContext);
+        LOGGER.info(StringUtils.join("Request body to be processed: ", ReflectionToStringBuilder.toString(json)));
+        SmsResponse result = messageService.getMessageSendingResult(json);
         stopMetrics(context);
         return result;
     }

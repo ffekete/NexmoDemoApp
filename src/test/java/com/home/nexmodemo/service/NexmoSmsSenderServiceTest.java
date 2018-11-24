@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.home.nexmodemo.context.TextMessageContext;
+import com.home.nexmodemo.dto.TextMessageDTO;
 import com.home.nexmodemo.factory.TextMessageFactory;
 import com.nexmo.client.NexmoClient;
 import com.nexmo.client.NexmoClientException;
@@ -49,12 +49,12 @@ public class NexmoSmsSenderServiceTest {
         // GIVEN
         TextMessage textMessage = mock(TextMessage.class);
         SmsClient smsClient = mock(SmsClient.class);
-        TextMessageContext textMessageContext = new TextMessageContext(FROM, TARGET, BODY);
+        TextMessageDTO textMessageDTO = new TextMessageDTO(FROM, TARGET, BODY);
         when(nexmoClient.getSmsClient()).thenReturn(smsClient);
-        when(textMessageFactory.getTextMessage(textMessageContext)).thenReturn(textMessage);
+        when(textMessageFactory.getTextMessage(textMessageDTO)).thenReturn(textMessage);
         when(smsClient.submitMessage(textMessage)).thenThrow(new NexmoClientException());
         // WHEN
-        Optional<SmsSubmissionResult[]> results = underTest.getResults(textMessageContext);
+        Optional<SmsSubmissionResult[]> results = underTest.getResults(textMessageDTO);
         // THEN
         verify(nexmoClient, times(1)).getSmsClient();
         verify(smsClient, times(1)).submitMessage(anyObject());
@@ -67,12 +67,12 @@ public class NexmoSmsSenderServiceTest {
         TextMessage textMessage = mock(TextMessage.class);
         SmsSubmissionResult[] smsSubmissionResults = new SmsSubmissionResult[]{};
         SmsClient smsClient = mock(SmsClient.class);
-        TextMessageContext textMessageContext = new TextMessageContext(FROM, TARGET, BODY);
+        TextMessageDTO textMessageDTO = new TextMessageDTO(FROM, TARGET, BODY);
         when(nexmoClient.getSmsClient()).thenReturn(smsClient);
-        when(textMessageFactory.getTextMessage(textMessageContext)).thenReturn(textMessage);
+        when(textMessageFactory.getTextMessage(textMessageDTO)).thenReturn(textMessage);
         when(smsClient.submitMessage(textMessage)).thenReturn(smsSubmissionResults);
         // WHEN
-        Optional<SmsSubmissionResult[]> results = underTest.getResults(textMessageContext);
+        Optional<SmsSubmissionResult[]> results = underTest.getResults(textMessageDTO);
         // THEN
         verify(nexmoClient, times(1)).getSmsClient();
         verify(smsClient, times(1)).submitMessage(textMessage);

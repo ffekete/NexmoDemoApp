@@ -10,12 +10,13 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.Optional;
 
+import com.home.nexmodemo.response.SmsResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.home.nexmodemo.context.TextMessageContext;
+import com.home.nexmodemo.dto.TextMessageDTO;
 import com.nexmo.client.sms.SmsSubmissionResult;
 
 public class MessageServiceTest {
@@ -42,41 +43,42 @@ public class MessageServiceTest {
     public void testGetMessageSendingResultShouldReturnOkWhenSubmissionResultsAreOk() {
         // GIVEN
         SmsSubmissionResult smsSubmissionResult = mock(SmsSubmissionResult.class);
-        TextMessageContext textMessageContext = new TextMessageContext(FROM, TARGET, BODY);
+        TextMessageDTO textMessageDTO = new TextMessageDTO(FROM, TARGET, BODY);
         when(smsSubmissionResult.getStatus()).thenReturn(SmsSubmissionResult.STATUS_OK);
-        when(smsMessageService.getResults(textMessageContext)).thenReturn(Optional.of(new SmsSubmissionResult[]{smsSubmissionResult}));
+        when(smsMessageService.getResults(textMessageDTO)).thenReturn(Optional.of(new SmsSubmissionResult[]{smsSubmissionResult}));
         // WHEN
-        String result = underTest.getMessageSendingResult(textMessageContext);
+        SmsResponse result = underTest.getMessageSendingResult(textMessageDTO);
         // THEN
-        assertEquals(result, OK_RESULT);
+        assertEquals(result.getStatus(), OK_RESULT);
+        assertEquals(result.getMessage(), "Sms successfully sent");
         verify(smsSubmissionResult, times(1)).getStatus();
-        verify(smsMessageService, times(1)).getResults(textMessageContext);
+        verify(smsMessageService, times(1)).getResults(textMessageDTO);
     }
 
     @Test
     public void testGetMessageSendingResultShouldReturnErrorWhenSubmissionResultsAreError() {
         // GIVEN
         SmsSubmissionResult smsSubmissionResult = mock(SmsSubmissionResult.class);
-        TextMessageContext textMessageContext = new TextMessageContext(FROM, TARGET, BODY);
+        TextMessageDTO textMessageDTO = new TextMessageDTO(FROM, TARGET, BODY);
         when(smsSubmissionResult.getStatus()).thenReturn(SmsSubmissionResult.STATUS_INTERNAL_ERROR);
-        when(smsMessageService.getResults(textMessageContext)).thenReturn(Optional.of(new SmsSubmissionResult[]{smsSubmissionResult}));
+        when(smsMessageService.getResults(textMessageDTO)).thenReturn(Optional.of(new SmsSubmissionResult[]{smsSubmissionResult}));
         // WHEN
-        String result = underTest.getMessageSendingResult(textMessageContext);
+        SmsResponse result = underTest.getMessageSendingResult(textMessageDTO);
         // THEN
-        assertEquals(result, ERROR_RESULT);
+        assertEquals(result.getStatus(), ERROR_RESULT);
         verify(smsSubmissionResult, times(1)).getStatus();
-        verify(smsMessageService, times(1)).getResults(textMessageContext);
+        verify(smsMessageService, times(1)).getResults(textMessageDTO);
     }
 
     @Test
     public void testGetMessageSendingResultShouldReturnErrorWhenSubmissionResultIsNull() {
         // GIVEN
-        TextMessageContext textMessageContext = new TextMessageContext(FROM, TARGET, BODY);
-        when(smsMessageService.getResults(textMessageContext)).thenReturn(Optional.empty());
+        TextMessageDTO textMessageDTO = new TextMessageDTO(FROM, TARGET, BODY);
+        when(smsMessageService.getResults(textMessageDTO)).thenReturn(Optional.empty());
         // WHEN
-        String result = underTest.getMessageSendingResult(textMessageContext);
+        SmsResponse result = underTest.getMessageSendingResult(textMessageDTO);
         // THEN
-        assertEquals(result, ERROR_RESULT);
-        verify(smsMessageService, times(1)).getResults(textMessageContext);
+        assertEquals(result.getStatus(), ERROR_RESULT);
+        verify(smsMessageService, times(1)).getResults(textMessageDTO);
     }
 }

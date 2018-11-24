@@ -2,7 +2,7 @@ package com.home.nexmodemo.factory;
 
 import org.springframework.stereotype.Component;
 
-import com.home.nexmodemo.context.TextMessageContext;
+import com.home.nexmodemo.dto.TextMessageDTO;
 import com.nexmo.client.sms.messages.TextMessage;
 
 /**
@@ -13,10 +13,10 @@ public class TextMessageFactory {
 
     /**
      * Creates a {@link TextMessage}.
-     * @param textMessageContext all info needed for text message.
+     * @param textMessageDTO all info needed for text message.
      * @return created message.
      */
-    public TextMessage getTextMessage(final TextMessageContext textMessageContext) {
-        return new TextMessage(textMessageContext.getFrom(), textMessageContext.getTo(), textMessageContext.getBody());
+    public TextMessage getTextMessage(final TextMessageDTO textMessageDTO) {
+        return new TextMessage(textMessageDTO.getFrom(), textMessageDTO.getTo(), textMessageDTO.getBody());
     }
 }

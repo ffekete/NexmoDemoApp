@@ -3,12 +3,14 @@ package com.home.nexmodemo.service;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.home.nexmodemo.context.TextMessageContext;
+import com.home.nexmodemo.dto.TextMessageDTO;
 import com.home.nexmodemo.factory.TextMessageFactory;
 import com.nexmo.client.NexmoClient;
 import com.nexmo.client.NexmoClientException;
@@ -38,17 +40,19 @@ public class NexmoSmsSenderService implements SmsMessageService {
      * Sends message and gets the result.
      * @return result of the transaction.
      */
-    public Optional<SmsSubmissionResult[]> getResults(final TextMessageContext textMessageContext) {
-        Message message = getTextMessage(textMessageContext);
+    public Optional<SmsSubmissionResult[]> getResults(final TextMessageDTO textMessageDTO) {
+        Message message = getTextMessage(textMessageDTO);
         try {
-            return Optional.ofNullable(nexmoClient.getSmsClient().submitMessage(message));
+            SmsSubmissionResult[] result = nexmoClient.getSmsClient().submitMessage(message);
+            LOGGER.info(StringUtils.join("Received response: ", ReflectionToStringBuilder.toString(result)));
+            return Optional.ofNullable(result);
         } catch (IOException | NexmoClientException exception) {
-            LOGGER.error(ERROR_MESSAGE_PATTERN, textMessageContext.getFrom(), textMessageContext.getTo(), textMessageContext.getBody(), exception);
+            LOGGER.error(ERROR_MESSAGE_PATTERN, textMessageDTO.getFrom(), textMessageDTO.getTo(), textMessageDTO.getBody(), exception);
             return Optional.empty();
         }
     }
 
-    private TextMessage getTextMessage(final TextMessageContext textMessageContext) {
-        return textMessageFactory.getTextMessage(textMessageContext);
+    private TextMessage getTextMessage(final TextMessageDTO textMessageDTO) {
+        return textMessageFactory.getTextMessage(textMessageDTO);
     }
 }

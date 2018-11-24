@@ -1,11 +1,13 @@
 package com.home.nexmodemo.service;
 
 import java.util.Arrays;
+import java.util.Optional;
 
+import com.home.nexmodemo.response.SmsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.home.nexmodemo.context.TextMessageContext;
+import com.home.nexmodemo.dto.TextMessageDTO;
 import com.nexmo.client.sms.SmsSubmissionResult;
 
 /**
@@ -28,13 +30,16 @@ public class MessageService {
      * Translates message sending result to simple String response.
      * @return result as a String.
      */
-    public String getMessageSendingResult(final TextMessageContext textMessageContext) {
-        return nexmoSmsSenderService.getResults(textMessageContext).map(this::getSmsSubmissionResult).orElse(ERROR_RESULT);
+    public SmsResponse getMessageSendingResult(final TextMessageDTO textMessageDTO) {
+        return nexmoSmsSenderService.getResults(textMessageDTO).map(this::getSmsSubmissionResult).orElse(SmsResponse.BUILDER.withStatus(ERROR_RESULT).withMessage("Unknown error happened...").build());
     }
 
-    private String getSmsSubmissionResult(final SmsSubmissionResult[] result) {
-        return Arrays.stream(result)
-                .map(SmsSubmissionResult::getStatus)
-                .anyMatch(submissionResult -> submissionResult != SmsSubmissionResult.STATUS_OK) ? ERROR_RESULT : OK_RESULT;
+    private SmsResponse getSmsSubmissionResult(final SmsSubmissionResult[] result) {
+        Optional<SmsSubmissionResult> failedResult = Arrays.stream(result)
+                .filter(smsSubmissionResult -> smsSubmissionResult.getStatus() != SmsSubmissionResult.STATUS_OK).findAny();
+        if(failedResult.isPresent()) {
+            return SmsResponse.BUILDER.withStatus(ERROR_RESULT).withMessage(failedResult.get().getErrorText()).build();
+        }
+        return SmsResponse.BUILDER.withStatus(OK_RESULT).withMessage("Sms successfully sent").build();
     }
 }

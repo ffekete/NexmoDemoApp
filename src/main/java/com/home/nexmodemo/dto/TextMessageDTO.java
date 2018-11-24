@@ -1,15 +1,18 @@
-package com.home.nexmodemo.context;
+package com.home.nexmodemo.dto;
 
 /**
  * Text message content.
  */
-public final class TextMessageContext {
+public final class TextMessageDTO {
 
-    private final String from;
-    private final String to;
-    private final String body;
+    private String from;
+    private String to;
+    private String body;
 
-    public TextMessageContext(final String from, final String to, final String body) {
+    public TextMessageDTO() {
+    }
+
+    public TextMessageDTO(final String from, final String to, final String body) {
         this.from = from;
         this.to = to;
         this.body = body;
