@@ -25,6 +25,10 @@ Before the first compile a valid api key and api secret value needs to be specif
 
 Specify the port number for the docker image.
 
+### Swagger
+Added swagger support. To access the api documentation visit:
+```http://localhost:8000/swagger-ui.html```
+
 ### Metrics
 Metrics can be accessed by the admin path:
 
