@@ -40,3 +40,12 @@ Metrics can be accessed by the admin path:
 Implemented metrics:
 * Number of started requests
 * Latency time of requests
+
+### Netflix Hystrix
+Netflix Hsytrix metrics support is added, access the dashboard by:
+
+    http://localhost:8000/hystrix
+
+Monitored link:
+
+    http://localhost:8000/hystrix.stream

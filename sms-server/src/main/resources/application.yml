@@ -1,7 +1,11 @@
 server:
   port: 8000
 api:
-  key: 033f4509
-  secret: 75f4858c86398aec
+  key: null
+  secret: null
 metrics:
   adminUrlMapping: "/admin/*"
+
+hystrix:
+  stream:
+    url: "/hystrix.stream"
