@@ -1,6 +1,5 @@
 package com.home.nexmodemo.configuration.spring;
 
-import com.codahale.metrics.servlets.AdminServlet;
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

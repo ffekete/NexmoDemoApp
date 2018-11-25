@@ -1,12 +1,24 @@
 package com.home.nexmodemo.dto;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotEmpty;
+
 /**
  * Text message content.
  */
 public final class TextMessageDTO {
 
+    @NotEmpty
+    @Length(min = 1)
     private String from;
+
+    @NotEmpty
+    @Length(min = 1)
     private String to;
+
+    @NotEmpty
+    @Length(max = 300)
     private String body;
 
     public TextMessageDTO() {

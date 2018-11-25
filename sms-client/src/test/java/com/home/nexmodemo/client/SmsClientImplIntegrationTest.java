@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,12 +24,11 @@ import static org.mockito.Mockito.when;
 @TestPropertySource(locations = "classpath:application.yml")
 public class SmsClientImplIntegrationTest {
 
-    private static final String FROM = "123";
+    private static final String FROM = "12345";
     private static final String TO = "456";
     private static final String TEXT_TO_SEND = "text to send";
     private static final String INTERNAL_ERROR = "Internal error";
     private static final String UNKNOWN_ERROR = "Unknown error happened...";
-
     private final SmsClient smsClient = new SmsClientImpl();
 
     @MockBean
@@ -47,7 +47,6 @@ public class SmsClientImplIntegrationTest {
         // THEN
         assertEquals(SmsResponse.StatusCode.OK, smsResponse.getStatus());
         assertEquals("Sms successfully sent", smsResponse.getMessage());
-
     }
 
     @Test
@@ -64,6 +63,19 @@ public class SmsClientImplIntegrationTest {
         // THEN
         assertEquals(SmsResponse.StatusCode.ERROR, smsResponse.getStatus());
         assertEquals(INTERNAL_ERROR, smsResponse.getMessage());
+    }
+
+    @Test
+    public void testShouldFail_nullParameter() throws Exception {
+        // GIVEN
+
+        // WHEN
+        SmsResponse smsResponse = smsClient.sendMessage("", TO, TEXT_TO_SEND);
+
+        // THEN
+        assertEquals(SmsResponse.StatusCode.ERROR, smsResponse.getStatus());
+        assertTrue(smsResponse.getMessage().matches(".+Field is not long enough.+"));
+        assertTrue(smsResponse.getMessage().matches(".+Field cannot be empty.+"));
     }
 
     @Test
