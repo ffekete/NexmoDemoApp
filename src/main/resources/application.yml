@@ -1,7 +1,0 @@
-server:
-  port: 8000
-api:
-  key: null
-  secret: null
-metrics:
-  adminUrlMapping: "/admin/*"
