@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.home</groupId>
             <artifactId>sms-server</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${sms-server.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,13 +1,12 @@
 package com.home.nexmodemo.configuration.spring;
 
+import com.codahale.metrics.servlets.AdminServlet;
+import com.home.nexmodemo.listener.HealthCheckServletContextListener;
+import com.home.nexmodemo.listener.MyMetricsServletContextListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.codahale.metrics.servlets.AdminServlet;
-import com.home.nexmodemo.listener.HealthCheckServletContextListener;
-import com.home.nexmodemo.listener.MyMetricsServletContextListener;
 
 /**
  * Stores basic beans and property configuration values.

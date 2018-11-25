@@ -19,6 +19,9 @@ public class SmsResponse {
         this.status = status;
     }
 
+    public SmsResponse() {
+    }
+
     public void setMessage(String message) {
         this.message = message;
     }

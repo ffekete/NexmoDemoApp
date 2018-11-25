@@ -2,8 +2,12 @@ package com.home.nexmodemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 
 @SpringBootApplication(scanBasePackages = "com.home.nexmodemo.*")
+@EnableCircuitBreaker
+@EnableHystrixDashboard
 public class NexmodemoApplication {
 
 	public static void main(String[] args) {

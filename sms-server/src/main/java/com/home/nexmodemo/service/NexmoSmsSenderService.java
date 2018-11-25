@@ -1,15 +1,5 @@
 package com.home.nexmodemo.service;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.home.nexmodemo.dto.TextMessageDTO;
 import com.home.nexmodemo.factory.TextMessageFactory;
 import com.nexmo.client.NexmoClient;
@@ -17,6 +7,15 @@ import com.nexmo.client.NexmoClientException;
 import com.nexmo.client.sms.SmsSubmissionResult;
 import com.nexmo.client.sms.messages.Message;
 import com.nexmo.client.sms.messages.TextMessage;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Obtains {@link TextMessage} and sends it via {@link NexmoClient}.

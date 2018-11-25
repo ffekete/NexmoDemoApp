@@ -1,7 +1,6 @@
 package com.home.nexmodemo.controller;
 
 import io.swagger.annotations.Api;
-import org.apache.http.entity.ContentType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

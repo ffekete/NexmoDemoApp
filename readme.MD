@@ -1,6 +1,6 @@
 # Sms application demo
 ### run:
-    spring-boot:run
+    mvn -pl sms-server spring-boot:run
 
 ### compile
     mvn clean install
@@ -15,7 +15,9 @@ With a request body containing:
     body: the message text.
 
 ### ToDo before first compile
-Before the first compile a valid api key and api secret value needs to be specified in application.yml.
+Before the first compile a valid api key and api secret value needs to be specified in application.yml. This can be obtained by registering at nexmo:
+
+    https://www.nexmo.com
 
 ## Docker support
 ### Build with docker

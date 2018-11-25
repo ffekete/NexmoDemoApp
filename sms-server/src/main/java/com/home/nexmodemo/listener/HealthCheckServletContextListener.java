@@ -3,8 +3,6 @@ package com.home.nexmodemo.listener;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.servlets.HealthCheckServlet;
 
-import javax.servlet.annotation.WebListener;
-
 public class HealthCheckServletContextListener extends HealthCheckServlet.ContextListener {
 
     public static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();

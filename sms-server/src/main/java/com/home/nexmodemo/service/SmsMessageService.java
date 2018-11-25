@@ -1,9 +1,9 @@
 package com.home.nexmodemo.service;
 
-import java.util.Optional;
-
 import com.home.nexmodemo.dto.TextMessageDTO;
 import com.nexmo.client.sms.SmsSubmissionResult;
+
+import java.util.Optional;
 
 interface SmsMessageService {
 

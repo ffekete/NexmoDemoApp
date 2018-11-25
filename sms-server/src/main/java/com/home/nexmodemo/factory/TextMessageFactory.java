@@ -1,9 +1,8 @@
 package com.home.nexmodemo.factory;
 
-import org.springframework.stereotype.Component;
-
 import com.home.nexmodemo.dto.TextMessageDTO;
 import com.nexmo.client.sms.messages.TextMessage;
+import org.springframework.stereotype.Component;
 
 /**
  * For creating {@link TextMessage} instances.
